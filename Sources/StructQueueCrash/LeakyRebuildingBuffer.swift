@@ -6,7 +6,7 @@ public final class LeakyRebuildingBufferBox: @unchecked Sendable {
 }
 
 public struct LeakyRebuildingBuffer: Sendable {
-    private let queue = DispatchQueue(label: "LeakyRebuildingBuffer", attributes: .concurrent)
+    private let queue = DispatchQueue(label: "LeakyRebuildingBuffer")
     private var _array: [Int] = []
 
     public init() {}
@@ -17,7 +17,7 @@ public struct LeakyRebuildingBuffer: Sendable {
 
     public func _append(_ element: Int) -> LeakyRebuildingBuffer {
         var copy = self
-        copy.queue.sync(flags: .barrier) {
+        copy.queue.sync {
             copy._array.append(element)
         }
         return copy
